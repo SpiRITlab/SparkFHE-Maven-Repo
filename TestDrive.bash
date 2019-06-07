@@ -152,7 +152,7 @@ function fetch_shared_libraries() {
 function update_environment_variables() {
 	# add to PATH variable
 	if [[ "$(grep $Spark_Distribution_Name ~/.bashrc)" == "" ]] ; then 
-		echo "
+		echo '
 			export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 			export SPARKFHE_HOME=/spark-3.0.0-SNAPSHOT-bin-SparkFHE
 			
@@ -165,19 +165,21 @@ function update_environment_variables() {
 			export HADOOP_HDFS_HOME=$HADOOP_HOME
 			export YARN_HOME=$HADOOP_HOME
 			export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+			export HADOOP_CLASSPATH=$(find $HADOOP_HOME -name "*.jar" | xargs echo | tr " " ":")
+    		export CLASSPATH=$CLASSPATH:$HADOOP_CLASSPATH
 
-			export HDFS_NAMENODE_USER=\"root\"
-			export HDFS_DATANODE_USER=\"root\"
-			export HDFS_SECONDARYNAMENODE_USER=\"root\"
-			export YARN_RESOURCEMANAGER_USER=\"root\"
-			export YARN_NODEMANAGER_USER=\"root\"
+			export HDFS_NAMENODE_USER="root"
+			export HDFS_DATANODE_USER="root"
+			export HDFS_SECONDARYNAMENODE_USER="root"
+			export YARN_RESOURCEMANAGER_USER="root"
+			export YARN_NODEMANAGER_USER="root"
 
 			# Hadoop native path
 			export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
-			export HADOOP_OPTS=\"-Djava.library.path=$HADOOP_HOME/lib\"
+			export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
 
 			# SparkFHE Environment Variables
-			export PATH=/$SPARKFHE_HOME/bin:$PATH" >> ~/.bashrc
+			export PATH=/$SPARKFHE_HOME/bin:$PATH' >> ~/.bashrc
 		source ~/.bashrc
 	fi
 }
