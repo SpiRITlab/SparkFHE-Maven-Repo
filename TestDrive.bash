@@ -57,7 +57,7 @@ function Usage() {
 
 
 function fetch_spark_distribution() {
-	echo "Fetching $Spark_Distribution..."
+	echo "Fetching $Spark_Distribution_File from aws s3..."
 	rm -rf $Spark_Distribution_File $Spark_Distribution_Name 
 	wget $SparkFHE_AWS_S3_Base_URL/dist/$Spark_Distribution_File
 	tar xzf $Spark_Distribution_File
@@ -66,8 +66,7 @@ function fetch_spark_distribution() {
 
 
 function fetch_hadoop_distribution() {
-	NUM_OF_WORKERS=$ExtraArg
-	echo "Fetching $Hadoop_Distribution..."
+	echo "Fetching $Hadoop_Distribution_File from aws s3..."
 	cd $Spark_Distribution_Name
 	rm -rf $Hadoop_Distribution_File $Hadoop_Distribution_Name
 	wget $SparkFHE_AWS_S3_Base_URL/dist/$Hadoop_Distribution_File
@@ -77,12 +76,16 @@ function fetch_hadoop_distribution() {
 	mkdir -p /tmp/hadoop
 	wget $SparkFHE_AWS_S3_Base_URL/dist/$HadoopConfigFiles
 	unzip -q -u "$HadoopConfigFiles"
-	mv hadoop $Hadoop_Distribution_Name/etc/
+	rm -rf $Hadoop_Distribution_Name/etc/*
+	mv hadoop/* $Hadoop_Distribution_Name/etc/
 
-	rm -p $$Hadoop_Distribution_Name/etc/hadoop/workers
-	for i in $(seq 1 $NUM_OF_WORKERS); do 
-		echo "worker$i" >> $Hadoop_Distribution_Name/etc/hadoop/workers
-	done
+	if [[ "$ExtraArg" != "" ]] ; then
+		NUM_OF_WORKERS=$ExtraArg
+		rm -rf $$Hadoop_Distribution_Name/etc/workers
+		for i in $(seq 1 $NUM_OF_WORKERS); do 
+			echo "worker$i" >> $Hadoop_Distribution_Name/etc/workers
+		done
+	fi
 
 	cd $Current_Directory
 	echo "DONE"
