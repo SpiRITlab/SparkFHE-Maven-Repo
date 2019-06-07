@@ -6,6 +6,9 @@
 SparkFHE_Maven_Repo_Base_URL=https://github.com/SpiRITlab/SparkFHE-Maven-Repo/raw/master
 SparkFHE_AWS_S3_Base_URL=https://sparkfhe.s3.amazonaws.com
 
+
+Hadoop_Distribution_Name=hadoop-3.3.0-SNAPSHOT
+Hadoop_Distribution_File="$Hadoop_Distribution_Name".tar.gz
 Spark_Distribution_Name=spark-3.0.0-SNAPSHOT-bin-SparkFHE
 Spark_Distribution_File="$Spark_Distribution_Name".tgz
 libSparkFHEName="libSparkFHE"
@@ -42,7 +45,8 @@ function CheckCommand() {
 function Usage() {
     echo "Usage: $0 PackageName"
     echo "Which package do you want to deploy to SparkFHEMavenRepo?"
-    echo "spark 		Apache Spark distributionpackages"
+    echo "hadoop 		Apache Hadoop distribution package"
+    echo "spark 		Apache Spark distribution package"
     echo "dependencies 	download and install plugin, api, and examples"
     echo "addon 		sparkfhe addon (scripts, resources)"
     echo "lib 			libSparkFHE.so (unix), libSparkFHE.dylib (mac osx)"
@@ -50,11 +54,18 @@ function Usage() {
     exit
 }
 
+function fetch_hadoop_distribution() {
+	echo "Fetching $Hadoop_Distribution..."
+	rm -rf $Hadoop_Distribution_File $Hadoop_Distribution_Name
+	wget $SparkFHE_AWS_S3_Base_URL/dist/$Hadoop_Distribution_File
+	tar xzf $Hadoop_Distribution_File
+	rm $Hadoop_Distribution_File
+}
+
 function fetch_spark_distribution() {
 	echo "Fetching $Spark_Distribution..."
-	rm -rf $Spark_Distribution_File
-	wget $SparkFHE_AWS_S3_Base_URL/research/$Spark_Distribution_File
-	rm -rf $Spark_Distribution_Name 
+	rm -rf $Spark_Distribution_File $Spark_Distribution_Name 
+	wget $SparkFHE_AWS_S3_Base_URL/dist/$Spark_Distribution_File
 	tar xzf $Spark_Distribution_File
 	rm $Spark_Distribution_File
 }
@@ -121,6 +132,8 @@ CheckCommands
 PackageName=$1
 if [[ "$PackageName" == "" ]]; then
   	Usage
+elif [[ "$PackageName" == "hadoop" ]]; then
+	fetch_hadoop_distribution
 elif [[ "$PackageName" == "spark" ]]; then
 	fetch_spark_distribution
 elif [[ "$PackageName" == "dependencies" ]]; then
@@ -137,10 +150,21 @@ elif [[ "$PackageName" == "all" ]]; then
 fi
 
 
+
 # add to PATH variable
-if [[ "$(grep $Spark_Distribution_Name ~/.bashrc)" == "" ]] ; then echo "export PATH=$Current_Directory/$Spark_Distribution_Name/bin:"'$PATH' >> ~/.bashrc; source ~/.bashrc; fi
+bashrc_changed=false
+if [[ "$(grep $Spark_Distribution_Name ~/.bashrc)" == "" ]] ; then 
+	echo "export PATH=$Current_Directory/$Spark_Distribution_Name/bin:"'$PATH' >> ~/.bashrc
+	bashrc_changed=true
+fi
+if [[ "$(grep hadoop ~/.bashrc)" == "" ]] ; then 
+	echo "export PATH=$Current_Directory/$Hadoop_Distribution_Name/bin:$Current_Directory/$Hadoop_Distribution_Name/sbin:"'$PATH' >> ~/.bashrc
+	bashrc_changed=true
+fi
 
-
+if [ "$bashrc_changed" = true ] ; then
+	source ~/.bashrc
+fi
 
 echo "The SparkFHE environment is all set. Enjoy!"
 

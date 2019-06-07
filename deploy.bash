@@ -2,6 +2,7 @@
 
 DATE=`date '+%Y-%m-%d %H:%M:%S'`
 currentDir=`pwd`
+HadoopBasePath='../hadoop'
 SparkBasePath='../spark'
 SparkFHEApiPath='../SparkFHE/sparkfhe-api-java'
 SparkFHEPluginPath='../SparkFHE-Plugin'
@@ -22,6 +23,7 @@ function CheckCommands() {
 function Usage() {
     echo "Usage: $0 PackageName [C]"
     echo "Which package do you want to deploy to SparkFHEMavenRepo?"
+    echo "hadoopDist		hadoop package"
     echo "spark 		modified Apache Spark packages with FHE support."
     echo "sparkDist 	official spark distribution"
     echo "api 			sparkfhe-api.jar; an API for the C++ shared library"
@@ -35,6 +37,14 @@ function Usage() {
     exit
 }
 
+function DeployHadoopDistribution() {
+	HadoopDistributionName=hadoop-3.3.0-SNAPSHOT.tar.gz
+	echo "Deploying hadoop distribution..."
+	rm -rf spiritlab/sparkfhe/$HadoopDistributionName
+	cp $HadoopBasePath/hadoop-dist/target/$HadoopDistributionName spiritlab/sparkfhe/dist/
+	cd $currentDir
+}
+
 function DeploySpark() {
 	echo "Deploying modified apache spark-*..."
 	rm -rf spiritlab/sparkfhe/research
@@ -46,8 +56,8 @@ function DeploySpark() {
 function DeploySparkDistribution() {
 	SparkDistributionName=spark-3.0.0-SNAPSHOT-bin-SparkFHE.tgz
 	echo "Deploying apache distribution..."
-	rm -rf spiritlab/sparkfhe/research/*.tgz
-	cp $SparkBasePath/$SparkDistributionName spiritlab/sparkfhe/research/
+	rm -rf spiritlab/sparkfhe/$SparkDistributionName
+	cp $SparkBasePath/$SparkDistributionName spiritlab/sparkfhe/dist/
 	cd $currentDir
 }
 
@@ -131,12 +141,15 @@ C=$2
 updatePkgName="."
 if [[ "$PackageName" == "" ]]; then
   	Usage
+elif [[ "$PackageName" == "hadoopDist" ]]; then
+	DeployHadoopDistribution
+	updatePkgName="spiritlab/sparkfhe/dist/HadoopDistribution"
 elif [[ "$PackageName" == "spark" ]]; then
 	DeploySpark
 	updatePkgName="spiritlab/sparkfhe/research/spark"
 elif [[ "$PackageName" == "sparkDist" ]]; then
 	DeploySparkDistribution
-	updatePkgName="spiritlab/sparkfhe/research/SparkDistribution"
+	updatePkgName="spiritlab/sparkfhe/dist/SparkDistribution"
 elif [[ "$PackageName" == "api" ]]; then
 	DeployApi
 	updatePkgName="spiritlab/sparkfhe/sparkfhe-api"
@@ -153,6 +166,7 @@ elif [[ "$PackageName" == "lib" ]]; then
 	DeployLib
 	updatePkgName="libSparkFHE"
 elif [[ "$PackageName" == "all" ]]; then
+	DeployHadoopDistribution
 	DeploySpark
 	DeploySparkDistribution
 	DeployApi
@@ -168,14 +182,16 @@ elif [[ "$PackageName" == "jars" ]]; then
 	updatePkgName="jars"
 fi
 
-if [[ "$C" == "C" && "$PackageName" != "sparkDist" && "$PackageName" != "lib" ]]; then
+if [[ "$C" == "C" && "$PackageName" != "hadoopDist" && "$PackageName" != "sparkDist" && "$PackageName" != "lib" ]]; then
 	git pull
 	git add -A . && git commit -m "[$DATE] Update $PackageName package(s)"
 	git push
+elif [[ "$C" == "C" && "$PackageName" == "hadoopDist" ]]; then
+	aws s3 cp spiritlab/sparkfhe/dist/$HadoopDistributionName s3://sparkfhe/dist/
 elif [[ "$C" == "C" && "$PackageName" == "sparkDist" ]]; then
-	aws s3 cp spiritlab/sparkfhe/research/spark-3.0.0-SNAPSHOT-bin-SparkFHE.tgz s3://sparkfhe/research/
+	aws s3 cp spiritlab/sparkfhe/dist/$SparkDistributionName s3://sparkfhe/dist/
 elif [[ "$C" == "C" && "$PackageName" == "lib" ]]; then
-	aws s3 cp libSparkFHE/libSparkFHE* s3://sparkfhe/libSparkFHE/
+	aws s3 cp libSparkFHE/"$libSparkFHEName"-"$family"-"$arch".zip s3://sparkfhe/libSparkFHE/
 fi
 
 
