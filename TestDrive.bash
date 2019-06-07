@@ -152,35 +152,35 @@ function fetch_shared_libraries() {
 function update_environment_variables() {
 	# add to PATH variable
 	if [[ "$(grep $Spark_Distribution_Name ~/.bashrc)" == "" ]] ; then 
-		echo '
-			export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
-			export SPARKFHE_HOME=/spark-3.0.0-SNAPSHOT-bin-SparkFHE
-			
-			# Hadoop Environment Variables
-			export HADOOP_HOME=$SPARKFHE_HOME/hadoop
-			export HADOOP_PREFIX=$HADOOP_HOME
-			export HADOOP_CONF_DIR=$HADOOP_HOME/etc
-			export HADOOP_MAPRED_HOME=$HADOOP_HOME
-			export HADOOP_COMMON_HOME=$HADOOP_HOME
-			export HADOOP_HDFS_HOME=$HADOOP_HOME
-			export YARN_HOME=$HADOOP_HOME
-			export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
-			export HADOOP_CLASSPATH=$(find $HADOOP_HOME -name "*.jar" | xargs echo | tr " " ":")
-    		export CLASSPATH=$CLASSPATH:$HADOOP_CLASSPATH
+		echo "
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
+export SPARKFHE_HOME=$Current_Directory/spark-3.0.0-SNAPSHOT-bin-SparkFHE
 
-			export HDFS_NAMENODE_USER="root"
-			export HDFS_DATANODE_USER="root"
-			export HDFS_SECONDARYNAMENODE_USER="root"
-			export YARN_RESOURCEMANAGER_USER="root"
-			export YARN_NODEMANAGER_USER="root"
+# Hadoop Environment Variables
+export HADOOP_HOME=$SPARKFHE_HOME/hadoop
+export HADOOP_PREFIX=$HADOOP_HOME
+export HADOOP_CONF_DIR=$HADOOP_HOME/etc
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+export HADOOP_CLASSPATH=\$(find $HADOOP_HOME -name \"*.jar\" | xargs echo | tr \" \" \":\")
+export CLASSPATH=$CLASSPATH:$HADOOP_CLASSPATH
 
-			# Hadoop native path
-			export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
-			export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
-			export LD_LIBRARY_PATH=$HADOOP_HOME/lib/native:$LD_LIBRARY_PATH
+export HDFS_NAMENODE_USER=\"root\"
+export HDFS_DATANODE_USER=\"root\"
+export HDFS_SECONDARYNAMENODE_USER=\"root\"
+export YARN_RESOURCEMANAGER_USER=\"root\"
+export YARN_NODEMANAGER_USER=\"root\"
 
-			# SparkFHE Environment Variables
-			export PATH=/$SPARKFHE_HOME/bin:$PATH' >> ~/.bashrc
+# Hadoop native path
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export HADOOP_OPTS=\"-Djava.library.path=$HADOOP_HOME/lib/native\"
+export LD_LIBRARY_PATH=$HADOOP_HOME/lib/native:$LD_LIBRARY_PATH
+
+# SparkFHE Environment Variables
+export PATH=/$SPARKFHE_HOME/bin:$PATH" >> ~/.bashrc
 		source ~/.bashrc
 	fi
 }
