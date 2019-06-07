@@ -76,7 +76,7 @@ function fetch_hadoop_distribution() {
 
 	mkdir -p /tmp/hadoop
 	wget $SparkFHE_AWS_S3_Base_URL/dist/$HadoopConfigFiles
-	unzip -q -u "$HadoopConfigFiles".zip
+	unzip -q -u "$HadoopConfigFiles"
 	mv hadoop $Hadoop_Distribution_Name/etc/
 
 	rm -p $$Hadoop_Distribution_Name/etc/hadoop/workers
