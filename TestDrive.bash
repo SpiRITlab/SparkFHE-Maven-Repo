@@ -9,6 +9,7 @@ SparkFHE_AWS_S3_Base_URL=https://sparkfhe.s3.amazonaws.com
 
 Hadoop_Distribution_Name=hadoop-3.3.0-SNAPSHOT
 Hadoop_Distribution_File="$Hadoop_Distribution_Name".tar.gz
+HadoopConfigFiles=hadoop.zip
 Spark_Distribution_Name=spark-3.0.0-SNAPSHOT-bin-SparkFHE
 Spark_Distribution_File="$Spark_Distribution_Name".tgz
 libSparkFHEName="libSparkFHE"
@@ -65,12 +66,24 @@ function fetch_spark_distribution() {
 
 
 function fetch_hadoop_distribution() {
+	NUM_OF_WORKERS=$ExtraArg
 	echo "Fetching $Hadoop_Distribution..."
 	cd $Spark_Distribution_Name
 	rm -rf $Hadoop_Distribution_File $Hadoop_Distribution_Name
 	wget $SparkFHE_AWS_S3_Base_URL/dist/$Hadoop_Distribution_File
 	tar xzf $Hadoop_Distribution_File
 	rm $Hadoop_Distribution_File
+
+	mkdir -p /tmp/hadoop
+	wget $SparkFHE_AWS_S3_Base_URL/dist/$HadoopConfigFiles
+	unzip -q -u "$HadoopConfigFiles".zip
+	mv hadoop $Hadoop_Distribution_Name/etc/
+
+	rm -p $$Hadoop_Distribution_Name/etc/hadoop/workers
+	for i in $(seq 1 $NUM_OF_WORKERS); do 
+		echo "worker$i" >> $Hadoop_Distribution_Name/etc/hadoop/workers
+	done
+
 	cd $Current_Directory
 	echo "DONE"
 }
@@ -135,10 +148,11 @@ function fetch_shared_libraries() {
 CheckCommands
 
 PackageName=$1
+ExtraArg=$2
 if [[ "$PackageName" == "" ]]; then
   	Usage
 elif [[ "$PackageName" == "hadoop" ]]; then
-	fetch_hadoop_distribution
+	fetch_hadoop_distribution $ExtraArg
 elif [[ "$PackageName" == "spark" ]]; then
 	fetch_spark_distribution
 elif [[ "$PackageName" == "dependencies" ]]; then
@@ -149,7 +163,7 @@ elif [[ "$PackageName" == "lib" ]]; then
 	fetch_shared_libraries
 elif [[ "$PackageName" == "all" ]]; then
 	fetch_spark_distribution
-	fetch_hadoop_distribution
+	fetch_hadoop_distribution $ExtraArg
 	fetch_dependencies
 	fetch_sparkfhe_addon
 	fetch_shared_libraries

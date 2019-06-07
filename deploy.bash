@@ -144,6 +144,9 @@ if [[ "$PackageName" == "" ]]; then
 elif [[ "$PackageName" == "hadoopDist" ]]; then
 	DeployHadoopDistribution
 	updatePkgName="spiritlab/sparkfhe/dist/HadoopDistribution"
+elif [[ "$PackageName" == "hadoopConfig" ]]; then
+	DeployHadoopConfig
+	updatePkgName="spiritlab/sparkfhe/dist/HadoopConfig"
 elif [[ "$PackageName" == "spark" ]]; then
 	DeploySpark
 	updatePkgName="spiritlab/sparkfhe/research/spark"
@@ -186,6 +189,8 @@ if [[ "$C" == "C" && "$PackageName" != "hadoopDist" && "$PackageName" != "sparkD
 	git pull
 	git add -A . && git commit -m "[$DATE] Update $PackageName package(s)"
 	git push
+elif [[ "$C" == "C" && "$PackageName" == "hadoopConfig" ]]; then
+	aws s3 cp spiritlab/sparkfhe/dist/hadoop.zip s3://sparkfhe/dist/	
 elif [[ "$C" == "C" && "$PackageName" == "hadoopDist" ]]; then
 	aws s3 cp spiritlab/sparkfhe/dist/$HadoopDistributionName s3://sparkfhe/dist/
 elif [[ "$C" == "C" && "$PackageName" == "sparkDist" ]]; then
