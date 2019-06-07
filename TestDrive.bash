@@ -75,9 +75,10 @@ function fetch_hadoop_distribution() {
 
 	mkdir -p /tmp/hadoop
 	wget $SparkFHE_AWS_S3_Base_URL/dist/$HadoopConfigFiles
-	unzip -q -u "$HadoopConfigFiles"
+	unzip -q -u $HadoopConfigFiles
 	rm -rf $Hadoop_Distribution_Name/etc/*
 	mv hadoop/* $Hadoop_Distribution_Name/etc/
+	rm -rf $HadoopConfigFiles hadoop
 
 	if [[ "$ExtraArg" != "" ]] ; then
 		NUM_OF_WORKERS=$ExtraArg
@@ -87,6 +88,7 @@ function fetch_hadoop_distribution() {
 		done
 	fi
 
+	mv $Hadoop_Distribution_Name hadoop
 	cd $Current_Directory
 	echo "DONE"
 }
@@ -181,7 +183,7 @@ if [[ "$(grep $Spark_Distribution_Name ~/.bashrc)" == "" ]] ; then
 	bashrc_changed=true
 fi
 if [[ "$(grep hadoop ~/.bashrc)" == "" ]] ; then 
-	echo "export PATH=$Current_Directory/$Hadoop_Distribution_Name/bin:$Current_Directory/$Hadoop_Distribution_Name/sbin:"'$PATH' >> ~/.bashrc
+	echo "export PATH=$Current_Directory/$Spark_Distribution_Name/hadoop/bin:$Current_Directory/$Spark_Distribution_Name/hadoop/sbin:"'$PATH' >> ~/.bashrc
 	bashrc_changed=true
 fi
 
