@@ -159,7 +159,7 @@ function update_environment_variables() {
 			# Hadoop Environment Variables
 			export HADOOP_HOME=$SPARKFHE_HOME/hadoop
 			export HADOOP_PREFIX=$HADOOP_HOME
-			export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+			export HADOOP_CONF_DIR=$HADOOP_HOME/etc
 			export HADOOP_MAPRED_HOME=$HADOOP_HOME
 			export HADOOP_COMMON_HOME=$HADOOP_HOME
 			export HADOOP_HDFS_HOME=$HADOOP_HOME
