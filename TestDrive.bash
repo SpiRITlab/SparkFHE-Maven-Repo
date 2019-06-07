@@ -54,13 +54,6 @@ function Usage() {
     exit
 }
 
-function fetch_hadoop_distribution() {
-	echo "Fetching $Hadoop_Distribution..."
-	rm -rf $Hadoop_Distribution_File $Hadoop_Distribution_Name
-	wget $SparkFHE_AWS_S3_Base_URL/dist/$Hadoop_Distribution_File
-	tar xzf $Hadoop_Distribution_File
-	rm $Hadoop_Distribution_File
-}
 
 function fetch_spark_distribution() {
 	echo "Fetching $Spark_Distribution..."
@@ -68,6 +61,18 @@ function fetch_spark_distribution() {
 	wget $SparkFHE_AWS_S3_Base_URL/dist/$Spark_Distribution_File
 	tar xzf $Spark_Distribution_File
 	rm $Spark_Distribution_File
+}
+
+
+function fetch_hadoop_distribution() {
+	echo "Fetching $Hadoop_Distribution..."
+	cd $Spark_Distribution_Name
+	rm -rf $Hadoop_Distribution_File $Hadoop_Distribution_Name
+	wget $SparkFHE_AWS_S3_Base_URL/dist/$Hadoop_Distribution_File
+	tar xzf $Hadoop_Distribution_File
+	rm $Hadoop_Distribution_File
+	cd $Current_Directory
+	echo "DONE"
 }
 
 
@@ -144,6 +149,7 @@ elif [[ "$PackageName" == "lib" ]]; then
 	fetch_shared_libraries
 elif [[ "$PackageName" == "all" ]]; then
 	fetch_spark_distribution
+	fetch_hadoop_distribution
 	fetch_dependencies
 	fetch_sparkfhe_addon
 	fetch_shared_libraries
