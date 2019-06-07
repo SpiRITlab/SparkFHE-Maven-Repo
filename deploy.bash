@@ -145,7 +145,6 @@ elif [[ "$PackageName" == "hadoopDist" ]]; then
 	DeployHadoopDistribution
 	updatePkgName="spiritlab/sparkfhe/dist/HadoopDistribution"
 elif [[ "$PackageName" == "hadoopConfig" ]]; then
-	DeployHadoopConfig
 	updatePkgName="spiritlab/sparkfhe/dist/HadoopConfig"
 elif [[ "$PackageName" == "spark" ]]; then
 	DeploySpark
@@ -185,7 +184,7 @@ elif [[ "$PackageName" == "jars" ]]; then
 	updatePkgName="jars"
 fi
 
-if [[ "$C" == "C" && "$PackageName" != "hadoopDist" && "$PackageName" != "sparkDist" && "$PackageName" != "lib" ]]; then
+if [[ "$C" == "C" && "$PackageName" != "hadoopConfig" && "$PackageName" != "hadoopDist" && "$PackageName" != "sparkDist" && "$PackageName" != "lib" ]]; then
 	git pull
 	git add -A . && git commit -m "[$DATE] Update $PackageName package(s)"
 	git push
