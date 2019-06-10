@@ -224,8 +224,10 @@ elif [[ "$PackageName" == "all" ]]; then
 fi
 
 
-
-
+echo "============================================================================================"
+echo "If you are a developer of our SparkFHE shared library, you may want to create this softlink:"
+echo "sudo ln -s $Spark_Distribution_Name/hadoop /usr/local/"
+echo "============================================================================================"
 
 echo "The SparkFHE environment is all set. Enjoy!"
 
