@@ -16,7 +16,7 @@ libSparkFHEName="libSparkFHE"
 
 ### UPDATE AUTOMATICALLY by running deploy.bash
 SparkFHE_Plugin_latest_jar_file=spiritlab/sparkfhe/spark-fhe_2.12/1.0-SNAPSHOT/spark-fhe_2.12-1.0-20190528.232552-1-jar-with-dependencies.jar
-SparkFHE_API_latest_jar_file=spiritlab/sparkfhe/sparkfhe-api/1.0-SNAPSHOT/sparkfhe-api-1.0-20190609.222446-1.jar
+SparkFHE_API_latest_jar_file=spiritlab/sparkfhe/sparkfhe-api/1.0-SNAPSHOT/sparkfhe-api-1.0-20190610.140733-1.jar
 SparkFHE_Examples_latest_jar_file=spiritlab/sparkfhe/sparkfhe-examples/1.0-SNAPSHOT/sparkfhe-examples-1.0-20190609.223155-1.jar
 #######################################
 Current_Directory=`pwd`
@@ -69,7 +69,7 @@ function fetch_hadoop_distribution() {
 	cd $Spark_Distribution_Name
 	arch=$(mvn --version | grep -o 'arch: [^,]*' | awk -F: 'gsub(/: /, ":") && gsub(/"/,"") {print $2}')
 	family=$(mvn --version | grep -o 'family: [^,]*' | awk -F: 'gsub(/: /, ":") && gsub(/"/,"") {print $2}')
-	Hadoop_Distribution_File="$Hadoop_Distribution_Name"-"$family"-"$arch".tar.gz.tar.gz
+	Hadoop_Distribution_File="$Hadoop_Distribution_Name"-"$family"-"$arch".tar.gz
 	rm -rf $Hadoop_Distribution_File $Hadoop_Distribution_Name
 	wget $SparkFHE_AWS_S3_Base_URL/dist/$Hadoop_Distribution_File
 	tar xzf $Hadoop_Distribution_File
@@ -224,8 +224,10 @@ elif [[ "$PackageName" == "all" ]]; then
 fi
 
 
-
-
+echo "============================================================================================"
+echo "If you are a developer of our SparkFHE shared library, you may want to create this softlink:"
+echo "sudo ln -s $Spark_Distribution_Name/hadoop /usr/local/"
+echo "============================================================================================"
 
 echo "The SparkFHE environment is all set. Enjoy!"
 
