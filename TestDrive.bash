@@ -8,7 +8,6 @@ SparkFHE_AWS_S3_Base_URL=https://sparkfhe.s3.amazonaws.com
 
 
 Hadoop_Distribution_Name=hadoop-3.3.0-SNAPSHOT
-Hadoop_Distribution_File="$Hadoop_Distribution_Name".tar.gz
 HadoopConfigFiles=hadoop.zip
 Spark_Distribution_Name=spark-3.0.0-SNAPSHOT-bin-SparkFHE
 Spark_Distribution_File="$Spark_Distribution_Name".tgz
@@ -17,8 +16,8 @@ libSparkFHEName="libSparkFHE"
 
 ### UPDATE AUTOMATICALLY by running deploy.bash
 SparkFHE_Plugin_latest_jar_file=spiritlab/sparkfhe/spark-fhe_2.12/1.0-SNAPSHOT/spark-fhe_2.12-1.0-20190528.232552-1-jar-with-dependencies.jar
-SparkFHE_API_latest_jar_file=spiritlab/sparkfhe/sparkfhe-api/1.0-SNAPSHOT/sparkfhe-api-1.0-20190606.040204-1.jar
-SparkFHE_Examples_latest_jar_file=spiritlab/sparkfhe/sparkfhe-examples/1.0-SNAPSHOT/sparkfhe-examples-1.0-20190609.205114-1.jar
+SparkFHE_API_latest_jar_file=spiritlab/sparkfhe/sparkfhe-api/1.0-SNAPSHOT/sparkfhe-api-1.0-20190609.222446-1.jar
+SparkFHE_Examples_latest_jar_file=spiritlab/sparkfhe/sparkfhe-examples/1.0-SNAPSHOT/sparkfhe-examples-1.0-20190609.223155-1.jar
 #######################################
 Current_Directory=`pwd`
 
@@ -57,7 +56,7 @@ function Usage() {
 
 
 function fetch_spark_distribution() {
-	echo "Fetching $Spark_Distribution_File from aws s3..."
+	echo "Fetching $Spark_Distribution_Name from aws s3..."
 	rm -rf $Spark_Distribution_File $Spark_Distribution_Name 
 	wget $SparkFHE_AWS_S3_Base_URL/dist/$Spark_Distribution_File
 	tar xzf $Spark_Distribution_File
@@ -66,8 +65,11 @@ function fetch_spark_distribution() {
 
 
 function fetch_hadoop_distribution() {
-	echo "Fetching $Hadoop_Distribution_File from aws s3..."
+	echo "Fetching $Hadoop_Distribution_Name from aws s3..."
 	cd $Spark_Distribution_Name
+	arch=$(mvn --version | grep -o 'arch: [^,]*' | awk -F: 'gsub(/: /, ":") && gsub(/"/,"") {print $2}')
+	family=$(mvn --version | grep -o 'family: [^,]*' | awk -F: 'gsub(/: /, ":") && gsub(/"/,"") {print $2}')
+	Hadoop_Distribution_File="$Hadoop_Distribution_Name"-"$family"-"$arch".tar.gz.tar.gz
 	rm -rf $Hadoop_Distribution_File $Hadoop_Distribution_Name
 	wget $SparkFHE_AWS_S3_Base_URL/dist/$Hadoop_Distribution_File
 	tar xzf $Hadoop_Distribution_File

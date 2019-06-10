@@ -23,7 +23,7 @@ function CheckCommands() {
 function Usage() {
     echo "Usage: $0 PackageName [C]"
     echo "Which package do you want to deploy to SparkFHEMavenRepo?"
-    echo "hadoopDist		hadoop package"
+    echo "hadoopDist	hadoop package"
     echo "spark 		modified Apache Spark packages with FHE support."
     echo "sparkDist 	official spark distribution"
     echo "api 			sparkfhe-api.jar; an API for the C++ shared library"
@@ -33,15 +33,20 @@ function Usage() {
     echo "lib 			libSparkFHE.so (unix), libSparkFHE.dylib (mac osx)"
     echo "all   		deploy all packages"
     echo " "
-    echo "C 			deploy&commit to SparkFHEMavenRepo (deploy, but not commit&push by default)"
+    echo "C 			deploy&commit to SparkFHEMavenRepo or AWS S3 (deploy, but not commit&push by default)"
     exit
 }
 
 function DeployHadoopDistribution() {
-	HadoopDistributionName=hadoop-3.3.0-SNAPSHOT.tar.gz
 	echo "Deploying hadoop distribution..."
-	rm -rf spiritlab/sparkfhe/$HadoopDistributionName
-	cp $HadoopBasePath/hadoop-dist/target/$HadoopDistributionName spiritlab/sparkfhe/dist/
+	#format like this, OS name: "mac os x", version: "10.14.1", arch: "x86_64", family: "mac"
+	arch=$(mvn --version | grep -o 'arch: [^,]*' | awk -F: 'gsub(/: /, ":") && gsub(/"/,"") {print $2}')
+	family=$(mvn --version | grep -o 'family: [^,]*' | awk -F: 'gsub(/: /, ":") && gsub(/"/,"") {print $2}')
+	HadoopVersion=hadoop-3.3.0-SNAPSHOT
+	HadoopDistributionName="$HadoopVersion"-"$family"-"$arch".tar.gz
+	echo "Deploying hadoop distribution..."
+	rm -rf spiritlab/sparkfhe/"$HadoopVersion".tar.gz
+	cp $HadoopBasePath/hadoop-dist/target/"$HadoopVersion".tar.gz spiritlab/sparkfhe/dist/$HadoopDistributionName
 	cd $currentDir
 }
 
@@ -161,9 +166,6 @@ elif [[ "$PackageName" == "plugin" ]]; then
 elif [[ "$PackageName" == "examples" ]]; then
 	DeployExample
 	updatePkgName="spiritlab/sparkfhe/sparkfhe-examples"
-# elif [[ "$PackageName" == "addon" ]]; then
-# 	DeployAddon
-# 	updatePkgName="spiritlab/sparkfhe/sparkfhe-addon"
 elif [[ "$PackageName" == "lib" ]]; then
 	DeployLib
 	updatePkgName="libSparkFHE"
