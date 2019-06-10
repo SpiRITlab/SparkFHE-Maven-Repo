@@ -69,7 +69,7 @@ function fetch_hadoop_distribution() {
 	cd $Spark_Distribution_Name
 	arch=$(mvn --version | grep -o 'arch: [^,]*' | awk -F: 'gsub(/: /, ":") && gsub(/"/,"") {print $2}')
 	family=$(mvn --version | grep -o 'family: [^,]*' | awk -F: 'gsub(/: /, ":") && gsub(/"/,"") {print $2}')
-	Hadoop_Distribution_File="$Hadoop_Distribution_Name"-"$family"-"$arch".tar.gz.tar.gz
+	Hadoop_Distribution_File="$Hadoop_Distribution_Name"-"$family"-"$arch".tar.gz
 	rm -rf $Hadoop_Distribution_File $Hadoop_Distribution_Name
 	wget $SparkFHE_AWS_S3_Base_URL/dist/$Hadoop_Distribution_File
 	tar xzf $Hadoop_Distribution_File
