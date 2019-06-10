@@ -44,7 +44,6 @@ function DeployHadoopDistribution() {
 	family=$(mvn --version | grep -o 'family: [^,]*' | awk -F: 'gsub(/: /, ":") && gsub(/"/,"") {print $2}')
 	HadoopVersion=hadoop-3.3.0-SNAPSHOT
 	HadoopDistributionName="$HadoopVersion"-"$family"-"$arch".tar.gz
-	echo "Deploying hadoop distribution..."
 	rm -rf spiritlab/sparkfhe/"$HadoopVersion".tar.gz
 	cp $HadoopBasePath/hadoop-dist/target/"$HadoopVersion".tar.gz spiritlab/sparkfhe/dist/$HadoopDistributionName
 	cd $currentDir
