@@ -6,6 +6,10 @@
     <versions>
       <version>1.0-SNAPSHOT</version>
     </versions>
+<<<<<<< HEAD
     <lastUpdated>20190609222446</lastUpdated>
+=======
+    <lastUpdated>20190609222315</lastUpdated>
+>>>>>>> 20fb05765c4f37eef690289c5a1302f9cd46960b
   </versioning>
 </metadata>
