@@ -2,9 +2,9 @@
 
 myUserName=peiworld
 
-master=c220g1-031103.wisc.cloudlab.us
-worker1=c220g1-031104.wisc.cloudlab.us
-worker2=c220g1-031119.wisc.cloudlab.us
+master=c220g5-111305.wisc.cloudlab.us
+worker1=c220g5-111304.wisc.cloudlab.us
+worker2=c220g5-111307.wisc.cloudlab.us
 
 echo "Deleting old jar files..."
 ssh -p 22 $myUserName@$master 'rm -rf /spark-3.0.0-SNAPSHOT-bin-SparkFHE/examples/jars/sparkfhe-examples*'
