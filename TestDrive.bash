@@ -17,7 +17,7 @@ libSparkFHEName="libSparkFHE"
 ### UPDATE AUTOMATICALLY by running deploy.bash
 SparkFHE_Plugin_latest_jar_file=spiritlab/sparkfhe/spark-fhe_2.12/1.0-SNAPSHOT/spark-fhe_2.12-1.0-20190528.232552-1-jar-with-dependencies.jar
 SparkFHE_API_latest_jar_file=spiritlab/sparkfhe/sparkfhe-api/1.0-SNAPSHOT/sparkfhe-api-1.0-20190611.024334-1.jar
-SparkFHE_Examples_latest_jar_file=spiritlab/sparkfhe/sparkfhe-examples/1.0-SNAPSHOT/sparkfhe-examples-1.0-20190611.025724-1.jar
+SparkFHE_Examples_latest_jar_file=spiritlab/sparkfhe/sparkfhe-examples/1.0-SNAPSHOT/sparkfhe-examples-1.0-20190611.040112-1.jar
 #######################################
 Current_Directory=`pwd`
 
@@ -51,6 +51,7 @@ function Usage() {
     echo "addon 		sparkfhe addon (scripts, resources)"
     echo "lib 			libSparkFHE.so (unix), libSparkFHE.dylib (mac osx)"
     echo "all   		deploy all packages"
+    echo "selfupdate	update TestDrive.bash to the lastest version"
     exit
 }
 
@@ -195,6 +196,19 @@ export PATH=/$SPARKFHE_HOME/bin:$PATH" >> ~/.bashrc
 	fi
 }
 
+function selfupdate() {
+	echo "Updating TestDrive.bash script..."
+	wget https://github.com/SpiRITlab/SparkFHE-Maven-Repo/raw/master/TestDrive.bash -O TestDrive.bash.bak
+	mv TestDrive.bash.bak TestDrive.bash
+}
+
+
+function print_hadoop_statement() {
+	echo "============================================================================================"
+	echo "If you are a developer of our SparkFHE shared library, you may want to create this softlink:"
+	echo "sudo ln -s $Spark_Distribution_Name/hadoop /usr/local/"
+	echo "============================================================================================"
+}
 
 CheckCommands
 
@@ -204,6 +218,7 @@ if [[ "$PackageName" == "" ]]; then
   	Usage
 elif [[ "$PackageName" == "hadoop" ]]; then
 	fetch_hadoop_distribution $ExtraArg
+	print_hadoop_statement
 elif [[ "$PackageName" == "spark" ]]; then
 	fetch_spark_distribution
 elif [[ "$PackageName" == "dependencies" ]]; then
@@ -221,13 +236,11 @@ elif [[ "$PackageName" == "all" ]]; then
 	fetch_sparkfhe_addon
 	fetch_shared_libraries
 	update_environment_variables
+	print_hadoop_statement
+elif [[ "$PackageName" == "selfupdate" ]]; then
+	selfupdate
 fi
 
-
-echo "============================================================================================"
-echo "If you are a developer of our SparkFHE shared library, you may want to create this softlink:"
-echo "sudo ln -s $Spark_Distribution_Name/hadoop /usr/local/"
-echo "============================================================================================"
 
 echo "The SparkFHE environment is all set. Enjoy!"
 
