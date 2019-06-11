@@ -199,6 +199,7 @@ export PATH=/$SPARKFHE_HOME/bin:$PATH" >> ~/.bashrc
 function selfupdate() {
 	echo "Updating TestDrive.bash script..."
 	wget https://github.com/SpiRITlab/SparkFHE-Maven-Repo/raw/master/TestDrive.bash -O TestDrive.bash.bak
+	echo "renaming TestDrive.bash.bak to TestDrive.bash..."
 	mv TestDrive.bash.bak TestDrive.bash
 }
 
