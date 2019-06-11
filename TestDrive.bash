@@ -44,13 +44,13 @@ function CheckCommand() {
 
 function Usage() {
     echo "Usage: $0 PackageName"
-    echo "Which package do you want to deploy to SparkFHEMavenRepo?"
+    echo "Which package do you want to install or update?"
     echo "hadoop 		Apache Hadoop distribution package"
     echo "spark 		Apache Spark distribution package"
     echo "dependencies 	download and install plugin, api, and examples"
     echo "addon 		sparkfhe addon (scripts, resources)"
     echo "lib 			libSparkFHE.so (unix), libSparkFHE.dylib (mac osx)"
-    echo "all   		deploy all packages"
+    echo "all   		all packages"
     echo "selfupdate	update TestDrive.bash to the lastest version"
     exit
 }
