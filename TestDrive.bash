@@ -167,6 +167,7 @@ function update_environment_variables() {
 		SPARKFHE_HOME=$Current_Directory/$Spark_Distribution_Name
 	fi
 	HADOOP_HOME=$SPARKFHE_HOME/hadoop
+	HADOOP_CLASSPATH=$(find $HADOOP_HOME -name "*.jar" | xargs echo | tr " " ":")
 
 	# add to PATH variable
 	if [[ "$(grep $Spark_Distribution_Name ~/.bashrc)" == "" ]] ; then 
