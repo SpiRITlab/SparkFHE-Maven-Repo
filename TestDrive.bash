@@ -199,7 +199,7 @@ export HADOOP_OPTS=\"-Djava.library.path=$HADOOP_HOME/lib/native\"
 export LD_LIBRARY_PATH=$HADOOP_HOME/lib/native:$LD_LIBRARY_PATH
 
 # SparkFHE Environment Variables
-export PATH=/$SPARKFHE_HOME/bin:$PATH" >> ~/.bashrc
+export PATH=$SPARKFHE_HOME/bin:$PATH" >> ~/.bashrc
 		source ~/.bashrc
 	fi
 }
