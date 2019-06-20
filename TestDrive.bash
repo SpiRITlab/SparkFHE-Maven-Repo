@@ -85,9 +85,9 @@ function fetch_hadoop_distribution() {
 
 	if [[ "$ExtraArg" != "" ]] ; then
 		NUM_OF_WORKERS=$ExtraArg
-		rm -rf $$Hadoop_Distribution_Name/etc/workers
+		rm -rf $Hadoop_Distribution_Name/etc/hadoop/workers
 		for i in $(seq 1 $NUM_OF_WORKERS); do 
-			echo "worker$i" >> $Hadoop_Distribution_Name/etc/workers
+			echo "worker$i" >> $Hadoop_Distribution_Name/etc/hadoop/workers
 		done
 	fi
 
