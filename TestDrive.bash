@@ -80,7 +80,7 @@ function fetch_hadoop_distribution() {
 	wget $SparkFHE_AWS_S3_Base_URL/dist/$HadoopConfigFiles
 	unzip -q -u $HadoopConfigFiles
 	rm -rf $Hadoop_Distribution_Name/etc/*
-	mv hadoop/* $Hadoop_Distribution_Name/etc/
+	mv hadoop $Hadoop_Distribution_Name/etc/
 	rm -rf $HadoopConfigFiles hadoop
 
 	if [[ "$ExtraArg" != "" ]] ; then
