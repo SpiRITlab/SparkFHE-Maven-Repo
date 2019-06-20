@@ -185,7 +185,7 @@ export HADOOP_HDFS_HOME=$HADOOP_HOME
 export YARN_HOME=$HADOOP_HOME
 export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 export HADOOP_CLASSPATH=\$(find $HADOOP_HOME -name \"*.jar\" | xargs echo | tr \" \" \":\")
-export CLASSPATH=$CLASSPATH:$HADOOP_CLASSPATH
+export CLASSPATH=$CLASSPATH:\$HADOOP_CLASSPATH
 
 export HDFS_NAMENODE_USER=\"root\"
 export HDFS_DATANODE_USER=\"root\"
