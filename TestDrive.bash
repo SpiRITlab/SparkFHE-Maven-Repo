@@ -161,11 +161,18 @@ function fetch_shared_libraries() {
 }
 
 function update_environment_variables() {
+	if [ "$Current_Directory" == "/" ] ; then
+		SPARKFHE_HOME=/$Spark_Distribution_Name
+	else
+		SPARKFHE_HOME=$Current_Directory/$Spark_Distribution_Name
+	fi
+	HADOOP_HOME=$SPARKFHE_HOME/hadoop
+
 	# add to PATH variable
 	if [[ "$(grep $Spark_Distribution_Name ~/.bashrc)" == "" ]] ; then 
 		echo "
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
-export SPARKFHE_HOME=$Current_Directory/spark-3.0.0-SNAPSHOT-bin-SparkFHE
+export SPARKFHE_HOME=$SPARKFHE_HOME
 
 # Hadoop Environment Variables
 export HADOOP_HOME=$SPARKFHE_HOME/hadoop
