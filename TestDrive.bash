@@ -183,7 +183,6 @@ export HADOOP_MAPRED_HOME=$HADOOP_HOME
 export HADOOP_COMMON_HOME=$HADOOP_HOME
 export HADOOP_HDFS_HOME=$HADOOP_HOME
 export YARN_HOME=$HADOOP_HOME
-export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 export HADOOP_CLASSPATH=\$(find $HADOOP_HOME -name \"*.jar\" | xargs echo | tr \" \" \":\")
 export CLASSPATH=$CLASSPATH:\$HADOOP_CLASSPATH
 
@@ -199,7 +198,7 @@ export HADOOP_OPTS=\"-Djava.library.path=$HADOOP_HOME/lib/native\"
 export LD_LIBRARY_PATH=$HADOOP_HOME/lib/native:$LD_LIBRARY_PATH
 
 # SparkFHE Environment Variables
-export PATH=$SPARKFHE_HOME/bin:$PATH" >> ~/.bashrc
+export PATH=$SPARKFHE_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH" >> ~/.bashrc
 		source ~/.bashrc
 	fi
 }
