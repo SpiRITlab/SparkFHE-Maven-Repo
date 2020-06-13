@@ -16,21 +16,22 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <junit.jupiter.version>5.3.2</junit.jupiter.version>
+        <fasterxml.jackson.version>2.10.0</fasterxml.jackson.version>
         <sparkfhe.lib.directory>../lib</sparkfhe.lib.directory>
         <sparkfhe.maven.repo>file://${project.basedir}/../../SparkFHE-Maven-Repo</sparkfhe.maven.repo>
     </properties>
 
     <distributionManagement>
-    <repository>
-    <id>release</id>
-    <url>${sparkfhe.maven.repo}</url>
-    <uniqueVersion>false</uniqueVersion>
-    </repository>
-    <snapshotRepository>
-    <id>snapshot</id>
-    <url>${sparkfhe.maven.repo}</url>
-    <uniqueVersion>true</uniqueVersion>
-    </snapshotRepository>
+        <repository>
+            <id>release</id>
+            <url>${sparkfhe.maven.repo}</url>
+        <uniqueVersion>false</uniqueVersion>
+        </repository>
+        <snapshotRepository>
+            <id>snapshot</id>
+            <url>${sparkfhe.maven.repo}</url>
+            <uniqueVersion>true</uniqueVersion>
+        </snapshotRepository>
     </distributionManagement>
 
     <dependencies>
@@ -50,7 +51,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.6</version>
+            <version>${fasterxml.jackson.version}</version>
         </dependency>
     </dependencies>
 
@@ -113,6 +114,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                    <detectJavaApiLink>false</detectJavaApiLink>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>

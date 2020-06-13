@@ -16,7 +16,7 @@ libSparkFHEName="libSparkFHE"
 
 ### UPDATE AUTOMATICALLY by running deploy.bash
 SparkFHE_Plugin_latest_jar_file=spiritlab/sparkfhe/spark-fhe_2.12/1.0-SNAPSHOT/spark-fhe_2.12-1.0-20190528.232552-1-jar-with-dependencies.jar
-SparkFHE_API_latest_jar_file=spiritlab/sparkfhe/sparkfhe-api/1.0-SNAPSHOT/sparkfhe-api-1.0-20190611.052620-1.jar
+SparkFHE_API_latest_jar_file=spiritlab/sparkfhe/sparkfhe-api/1.0-SNAPSHOT/sparkfhe-api-1.0-20200613.042521-1.jar
 SparkFHE_Examples_latest_jar_file=spiritlab/sparkfhe/sparkfhe-examples/1.0-SNAPSHOT/sparkfhe-examples-1.0-20190613.161525-1.jar
 #######################################
 Current_Directory=`pwd`
@@ -148,9 +148,9 @@ function fetch_shared_libraries() {
 	wget $SparkFHE_AWS_S3_Base_URL/$libSparkFHEName/"$libSparkFHEName"-"$family"-"$arch".zip
 	if [[ -d "$libSparkFHEName" ]] ; then
 		mkdir -p tmp_$libSparkFHEName
-		rm -rf $libSparkFHEName/lib/$libSparkFHEName.*
+		rm -rf deps/lib/$libSparkFHEName.*
 		unzip -q -u "$libSparkFHEName"-"$family"-"$arch".zip -d tmp_$libSparkFHEName
-		mv tmp_$libSparkFHEName/$libSparkFHEName/lib/$libSparkFHEName.* $libSparkFHEName/lib/
+		mv tmp_$libSparkFHEName/deps/lib/$libSparkFHEName.* deps/lib/
 		rm -rf tmp_$libSparkFHEName
 	else	
 		unzip -q -u "$libSparkFHEName"-"$family"-"$arch".zip

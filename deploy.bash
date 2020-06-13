@@ -8,7 +8,7 @@ SparkFHEApiPath='../SparkFHE/sparkfhe-api-java'
 SparkFHEPluginPath='../SparkFHE-Plugin'
 SparkFHEexamplesPath='../SparkFHE-Examples'
 SparkFHEAddonPath='../SparkFHE-Addon'
-libSparkFHEPath='../SparkFHE/lib'
+libSparkFHEPath='../SparkFHE/deps/lib'
 
 function CheckCommands() {
 	commands=("mvn" "unzip" "awk" )
@@ -126,14 +126,15 @@ function DeployLib() {
 	mkdir -p $libSparkFHEName
 	#find $libSparkFHEPath/ -maxdepth 1 -type f | xargs -I {} cp {} $libSparkFHEName/
 	cd ../SparkFHE
+	# Update: no longer need this
 	# change the absolute path in shared lib produced by mac
-	if [[ "$family" == "mac" ]]; then
-		install_name_tool -change /Users/ph/myGit/project_on_vhost6/SparkFHE/libSparkFHE/lib/libgmp.10.dylib @loader_path/libgmp.10.dylib $libSparkFHEName/lib/libSparkFHE.dylib
-		install_name_tool -change /Users/ph/myGit/project_on_vhost6/SparkFHE/libSparkFHE/lib/libgf2x.1.dylib @loader_path/libgf2x.1.dylib $libSparkFHEName/lib/libSparkFHE.dylib
-		install_name_tool -add_rpath "@loader_path" $libSparkFHEName/lib/libSparkFHE.dylib
-		install_name_tool -add_rpath "libSparkFHE/lib" $libSparkFHEName/lib/libSparkFHE.dylib	
-	fi
-	zip -r $currentDir/$libSparkFHEName/"$libSparkFHEName"-"$family"-"$arch".zip $libSparkFHEName/lib/$(ls $libSparkFHEName/lib | awk '/libSparkFHE.so$/||/libSparkFHE.dylib$/')
+	# if [[ "$family" == "mac" ]]; then
+	# 	install_name_tool -change /Users/ph/myGit/project_on_vhost6/SparkFHE/deps/lib/libgmp.10.dylib @loader_path/libgmp.10.dylib deps/lib/libSparkFHE.dylib
+	# 	install_name_tool -change /Users/ph/myGit/project_on_vhost6/SparkFHE/deps/lib/libgf2x.1.dylib @loader_path/libgf2x.1.dylib deps/lib/libSparkFHE.dylib
+	# 	install_name_tool -add_rpath "@loader_path" deps/lib/libSparkFHE.dylib
+	# 	install_name_tool -add_rpath "deps/lib" deps/lib/libSparkFHE.dylib	
+	# fi
+	zip -r $currentDir/$libSparkFHEName/"$libSparkFHEName"-"$family"-"$arch".zip deps/lib/$(ls deps/lib | awk '/libSparkFHE.so$/||/libSparkFHE.dylib$/')
 	cd $currentDir
 }
 
