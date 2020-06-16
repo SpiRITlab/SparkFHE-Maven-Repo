@@ -16,8 +16,8 @@ libSparkFHEName="libSparkFHE"
 
 ### UPDATE AUTOMATICALLY by running deploy.bash
 SparkFHE_Plugin_latest_jar_file=spiritlab/sparkfhe/spark-fhe_2.12/1.0-SNAPSHOT/spark-fhe_2.12-1.0-20190528.232552-1-jar-with-dependencies.jar
-SparkFHE_API_latest_jar_file=spiritlab/sparkfhe/sparkfhe-api/1.0-SNAPSHOT/sparkfhe-api-1.0-20200613.042521-1.jar
-SparkFHE_Examples_latest_jar_file=spiritlab/sparkfhe/sparkfhe-examples/1.0-SNAPSHOT/sparkfhe-examples-1.0-20190613.161525-1.jar
+SparkFHE_API_latest_jar_file=spiritlab/sparkfhe/sparkfhe-api/1.0-SNAPSHOT/sparkfhe-api-1.0-20200616.045633-1.jar
+SparkFHE_Examples_latest_jar_file=spiritlab/sparkfhe/sparkfhe-examples/1.0-SNAPSHOT/sparkfhe-examples-1.0-20200616.045457-1.jar
 #######################################
 Current_Directory=`pwd`
 
@@ -106,11 +106,11 @@ function fetch_dependencies() {
 		if [[ "$jar_file" != "" ]] ; then rm jars/$jar_file; fi
 	done
 	wget $SparkFHE_Maven_Repo_Base_URL/$SparkFHE_Plugin_latest_jar_file
-	wget $SparkFHE_Maven_Repo_Base_URL/$SparkFHE_API_latest_jar_file
+	wget $SparkFHE_AWS_S3_Base_URL/$SparkFHE_API_latest_jar_file
 	mv *.jar jars/
 	jar_file=$(ls examples/jars | grep sparkfhe-examples)
 	if [[ "$jar_file" != "" ]] ; then rm examples/jars/$jar_file; fi
-	wget $SparkFHE_Maven_Repo_Base_URL/$SparkFHE_Examples_latest_jar_file
+	wget $SparkFHE_AWS_S3_Base_URL/$SparkFHE_Examples_latest_jar_file
 	mv *.jar examples/jars/
 	cd $Current_Directory
 	echo "DONE"
