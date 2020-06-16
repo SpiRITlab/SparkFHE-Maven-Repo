@@ -10,6 +10,9 @@ SparkFHEexamplesPath='../SparkFHE-Examples'
 SparkFHEAddonPath='../SparkFHE-Addon'
 libSparkFHEPath='../SparkFHE/deps/lib'
 
+scala_version_number=2.12
+release_version=2.0-SNAPSHOT
+
 function CheckCommands() {
 	commands=("mvn" "unzip" "awk" )
 	for ((idx=0; idx<${#commands[@]}; ++idx)); do
@@ -75,7 +78,6 @@ function DeployApi() {
 
 	# update TestDrive.bash
 	# e.g., spiritlab/sparkfhe/sparkfhe-api/1.0-SNAPSHOT/sparkfhe-api-1.0-20181207.083754-1.jar
-	release_version=1.0-SNAPSHOT
 	SparkFHE_API_latest_jar_file=$(ls spiritlab/sparkfhe/sparkfhe-api/$release_version | awk 'match($0, /sparkfhe-api-[0-9].[0-9]-*.*-[0-9].jar$/) {print}')
 	echo "Updating TestDrive.bash to use $SparkFHE_API_latest_jar_file..."
 	sed -i'.bak' 's/SparkFHE_API_latest_jar_file=.*/SparkFHE_API_latest_jar_file=spiritlab\/sparkfhe\/sparkfhe-api'"\/$release_version\/$SparkFHE_API_latest_jar_file"'/g' TestDrive.bash
@@ -90,9 +92,7 @@ function DeployPlugin() {
 	cd $currentDir
 
 	# update TestDrive.bash
-	# e.g., spiritlab/sparkfhe/spark-fhe_2.12/1.0-SNAPSHOT/spark-fhe_2.12-1.0-20181213.175432-1-jar-with-dependencies.jar
-	release_version=1.0-SNAPSHOT
-	scala_version_number=2.12
+	# e.g., spiritlab/sparkfhe/spark-fhe_2.12/1.0-SNAPSHOT/spark-fhe_2.12-1.0-20181213.175432-1-jar-with-dependencies.jar	
 	SparkFHE_Plugin_latest_jar_file=$(ls spiritlab/sparkfhe/spark-fhe_$scala_version_number/$release_version | awk 'match($0, /spark-fhe*.*-with-dependencies.jar$/) {print}')
 	echo "Updating TestDrive.bash to use $SparkFHE_Plugin_latest_jar_file..."
 	sed -i'.bak' 's/SparkFHE_Plugin_latest_jar_file=.*/SparkFHE_Plugin_latest_jar_file=spiritlab\/sparkfhe\/spark-fhe_'"$scala_version_number\/$release_version\/$SparkFHE_Plugin_latest_jar_file"'/g' TestDrive.bash
@@ -110,7 +110,6 @@ function DeployExample() {
 
 	# update TestDrive.bash
 	# e.g., spiritlab/sparkfhe/sparkfhe-examples/1.0-SNAPSHOT/sparkfhe-examples-1.0-20181213.123133-1.jar
-	release_version=1.0-SNAPSHOT
 	SparkFHE_Examples_latest_jar_file=$(ls spiritlab/sparkfhe/sparkfhe-examples/$release_version | awk 'match($0, /sparkfhe-examples-[0-9].[0-9]-*.*-[0-9].jar$/) {print}')
 	echo "Updating TestDrive.bash to use $SparkFHE_Examples_latest_jar_file..."
 	sed -i'.bak' 's/SparkFHE_Examples_latest_jar_file=.*/SparkFHE_Examples_latest_jar_file=spiritlab\/sparkfhe\/sparkfhe-examples'"\/$release_version\/$SparkFHE_Examples_latest_jar_file"'/g' TestDrive.bash
@@ -192,15 +191,16 @@ if [[ "$C" == "C" && "$PackageName" != "hadoopConfig" \
 	&& "$PackageName" != "hadoopDist" \
 	&& "$PackageName" != "sparkDist" \
 	&& "$PackageName" != "lib" \
+	&& "$PackageName" != "plugin" \
 	&& "$PackageName" != "api" \
 	&& "$PackageName" != "examples" ]]; then
 	git pull
 	git add -A . && git commit -m "[$DATE] Update $PackageName package(s)"
 	git push
-# elif [[ "$C" == "C" && "$PackageName" == "plugin" ]]; then
-# 	aws s3 rm --recursive s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-plugin
-# 	aws s3 cp --recursive spiritlab/sparkfhe/sparkfhe-plugin s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-plugin
-#   aws s3 cp --recursive TestDrive.bash s3://sparkfhe/
+elif [[ "$C" == "C" && "$PackageName" == "plugin" ]]; then
+	aws s3 rm --recursive s3://sparkfhe/spiritlab/sparkfhe/spark-fhe_2.12
+	aws s3 cp --recursive spiritlab/sparkfhe/spark-fhe_2.12 s3://sparkfhe/spiritlab/sparkfhe/spark-fhe_2.12
+  	aws s3 cp TestDrive.bash s3://sparkfhe/TestDrive.bash
 elif [[ "$C" == "C" && "$PackageName" == "api" ]]; then
 	aws s3 rm --recursive s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-api
 	aws s3 cp --recursive spiritlab/sparkfhe/sparkfhe-api s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-api
