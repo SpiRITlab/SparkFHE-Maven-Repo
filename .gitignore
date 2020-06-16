@@ -4,3 +4,4 @@ spiritlab/sparkfhe/dist/*.tgz
 spiritlab/sparkfhe/dist/*.tar.gz
 spiritlab/sparkfhe/sparkfhe-examples
 spiritlab/sparkfhe/sparkfhe-api
+TestDrive.bash

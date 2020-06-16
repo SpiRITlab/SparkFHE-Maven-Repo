@@ -204,11 +204,11 @@ if [[ "$C" == "C" && "$PackageName" != "hadoopConfig" \
 elif [[ "$C" == "C" && "$PackageName" == "api" ]]; then
 	aws s3 rm --recursive s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-api
 	aws s3 cp --recursive spiritlab/sparkfhe/sparkfhe-api s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-api
-	aws s3 cp --recursive TestDrive.bash s3://sparkfhe/
+	aws s3 cp TestDrive.bash s3://sparkfhe/TestDrive.bash
 elif [[ "$C" == "C" && "$PackageName" == "examples" ]]; then
 	aws s3 rm --recursive s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-examples
 	aws s3 cp --recursive spiritlab/sparkfhe/sparkfhe-examples s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-examples
-	aws s3 cp --recursive TestDrive.bash s3://sparkfhe/
+	aws s3 cp TestDrive.bash s3://sparkfhe/TestDrive.bash
 elif [[ "$C" == "C" && "$PackageName" == "hadoopConfig" ]]; then
 	aws s3 cp spiritlab/sparkfhe/dist/hadoop.zip s3://sparkfhe/dist/	
 elif [[ "$C" == "C" && "$PackageName" == "hadoopDist" ]]; then
