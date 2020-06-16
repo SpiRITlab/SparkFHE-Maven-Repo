@@ -58,7 +58,7 @@ function DeploySpark() {
 }
 
 function DeploySparkDistribution() {
-	SparkDistributionName=spark-3.0.0-SNAPSHOT-bin-SparkFHE.tgz
+	SparkDistributionName=spark-3.1.0-SNAPSHOT-bin-SparkFHE.tgz
 	echo "Deploying apache distribution..."
 	rm -rf spiritlab/sparkfhe/$SparkDistributionName
 	cp $SparkBasePath/$SparkDistributionName spiritlab/sparkfhe/dist/
