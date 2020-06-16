@@ -191,22 +191,18 @@ fi
 if [[ "$C" == "C" && "$PackageName" != "hadoopConfig" \
 	&& "$PackageName" != "hadoopDist" \
 	&& "$PackageName" != "sparkDist" \
-	&& "$PackageName" != "lib" \
-	&& "$PackageName" != "api" \
-	&& "$PackageName" != "plugin" \
-	&& "$PackageName" != "examples" ]]; then
+	&& "$PackageName" != "lib" ]]; then
+
+	if [[ "$C" == "C" && "$PackageName" == "api" ]]; then
+		aws s3 rm --recursive s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-api
+		aws s3 cp --recursive spiritlab/sparkfhe/sparkfhe-api s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-api
+	elif [[ "$C" == "C" && "$PackageName" == "examples" ]]; then
+		aws s3 rm --recursive s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-examples
+		aws s3 cp --recursive spiritlab/sparkfhe/sparkfhe-examples s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-examples
+	fi
 	git pull
 	git add -A . && git commit -m "[$DATE] Update $PackageName package(s)"
 	git push
-elif [[ "$C" == "C" && "$PackageName" == "plugin" ]]; then
-	aws s3 rm --recursive s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-plugin
-	aws s3 cp --recursive spiritlab/sparkfhe/sparkfhe-plugin s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-plugin
-elif [[ "$C" == "C" && "$PackageName" == "api" ]]; then
-	aws s3 rm --recursive s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-api
-	aws s3 cp --recursive spiritlab/sparkfhe/sparkfhe-api s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-api
-elif [[ "$C" == "C" && "$PackageName" == "examples" ]]; then
-	aws s3 rm --recursive s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-examples
-	aws s3 cp --recursive spiritlab/sparkfhe/sparkfhe-examples s3://sparkfhe/spiritlab/sparkfhe/sparkfhe-examples
 elif [[ "$C" == "C" && "$PackageName" == "hadoopConfig" ]]; then
 	aws s3 cp spiritlab/sparkfhe/dist/hadoop.zip s3://sparkfhe/dist/	
 elif [[ "$C" == "C" && "$PackageName" == "hadoopDist" ]]; then
