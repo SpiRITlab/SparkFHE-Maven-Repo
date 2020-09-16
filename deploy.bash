@@ -11,7 +11,8 @@ SparkFHEAddonPath='../SparkFHE-Addon'
 libSparkFHEPath='../SparkFHE/deps/lib'
 
 scala_version_number=2.12
-release_version=2.0-SNAPSHOT
+release_version=1.1.1-SNAPSHOT
+echo "Release Version: $release_version"
 
 function CheckCommands() {
 	commands=("mvn" "unzip" "awk" )
