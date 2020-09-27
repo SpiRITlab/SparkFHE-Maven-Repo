@@ -12,6 +12,7 @@ libSparkFHEPath='../SparkFHE/deps/lib'
 
 scala_version_number=2.12
 release_version=1.1.1-SNAPSHOT
+SparkDistributionName=spark-3.0.0-bin-SparkFHE.tgz
 echo "Release Version: $release_version"
 
 function CheckCommands() {
@@ -62,7 +63,6 @@ function DeploySpark() {
 }
 
 function DeploySparkDistribution() {
-	SparkDistributionName=spark-3.1.0-SNAPSHOT-bin-SparkFHE.tgz
 	echo "Deploying apache distribution..."
 	rm -rf spiritlab/sparkfhe/$SparkDistributionName
 	cp $SparkBasePath/$SparkDistributionName spiritlab/sparkfhe/dist/
